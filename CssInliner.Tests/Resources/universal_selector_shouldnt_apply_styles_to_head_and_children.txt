@@ -1,0 +1,13 @@
+<html>
+<head>
+<style>
+* {
+color: purple
+}
+</style>
+<link href="./style.css" type="text/css" rel="Stylesheet"/>
+</head>
+<body>
+<span>ASDF</span>
+</body>
+</html>

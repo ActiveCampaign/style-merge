@@ -1,0 +1,5 @@
+<html style="font-family: Arial,'Helvetica Neue',Helvetica,sans-serif; background: background-image:url(http://foobar.com);"><head>
+
+</head><body style="font-family: Arial,'Helvetica Neue',Helvetica,sans-serif; background: background-image:url(http://foobar.com);">
+
+</body></html>
