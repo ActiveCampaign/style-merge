@@ -61,6 +61,26 @@ namespace CssInliner.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;
+        ///&lt;html&gt;&lt;body&gt;
+        ///&lt;style type=&quot;text/css&quot;&gt;
+        ///a:hover { color: green !important; }
+        ///a:active { color: purple !important; }
+        ///a:focus { color: yellow !important; }
+        ///a:visited { color: blue !important; }
+        ///a:target { color: orange !important; }
+        ///div:first-letter { color: white !important; }
+        ///div:first-line { color: lightgreen !important; }
+        ///div:before { color: pink !important; }
+        ///div:after { color: gray !importa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CssInliner_Should_Handle_PseudoClasses {
+            get {
+                return ResourceManager.GetString("CssInliner_Should_Handle_PseudoClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
         ///&lt;/head&gt;

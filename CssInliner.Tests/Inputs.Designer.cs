@@ -143,6 +143,15 @@ namespace CssInliner.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Inliner_Should_Support_PseudoClasses {
+            get {
+                return ResourceManager.GetString("Inliner_Should_Support_PseudoClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
         ///    &lt;style&gt;

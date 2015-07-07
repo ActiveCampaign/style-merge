@@ -114,7 +114,35 @@ namespace CssInliner.Tests
         [Fact]
         public void InlinerCanParseAndInlineEmailACIDTestCSS()
         {
-            Assert.Throws<InliningException>(() => Inliner.ProcessHtml(Inputs.EmailACIDTest));
+            //TODO: this should attempt to produce exactly same result as Premailer.
+            Inliner.ProcessHtml(Inputs.EmailACIDTest);
+        }
+
+        [Theory]
+        [InlineData(":link")]
+        [InlineData(":hover")]
+        [InlineData(":active")]
+        [InlineData(":focus")]
+        [InlineData(":visited")]
+        [InlineData(":target")]
+        [InlineData(":first-letter")]
+        [InlineData(":first-line")]
+        [InlineData(":before")]
+        [InlineData(":after")]
+        //[InlineData(":nth-child(n)")]
+        //[InlineData(":nth-last-child(n)")]
+        //[InlineData(":nth-of-type(n)")]
+        //[InlineData(":nth-last-of-type(n)")]
+        //[InlineData(":first-child")]
+        //[InlineData(":last-child")]
+        //[InlineData(":first-of-type")]
+        //[InlineData(":last-of-type")]
+        //[InlineData(":empty")]
+        public void InlinerShouldHandlePsuedoSelectors(string psuedoSelector)
+        {
+            var input = Inputs.Inliner_Should_Support_PseudoClasses.Replace("~~TEST_SELECTOR~~", psuedoSelector);
+            var processed = Inliner.ProcessHtml(input);
+            Assert.Equal(Outputs.CssInliner_Should_Handle_PseudoClasses.Replace("~~TEST_SELECTOR~~", psuedoSelector).EliminateWhitespace(), processed.EliminateWhitespace());
         }
 
     }

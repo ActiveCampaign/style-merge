@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\EmailACIDTest.txt" />
+    <None Include="Resources\CssInliner_Should_Handle_PseudoClasses.txt" />
     <Content Include="Resources\Expected_InlinerShouldKeepMediaQueryStylesInStyleBlocks.html" />
     <Content Include="Resources\HTML5_Boilerplate.html" />
     <None Include="Resources\style_sheet_attributes_with_quotes_should_be_handled_properly.txt" />
@@ -107,6 +108,7 @@
     <None Include="Resources\html_with_double_quote_doctype.txt" />
     <None Include="Resources\inlined_url_declarations_should_not_have_spaces_added.txt" />
     <Content Include="Resources\InlinerShouldKeepMediaQueryStylesInStyleBlocks.html" />
+    <None Include="Resources\Inliner_Should_Support_PseudoClasses.txt" />
     <Content Include="Resources\Specificity_Ordering_Test.html" />
   </ItemGroup>
   <ItemGroup>

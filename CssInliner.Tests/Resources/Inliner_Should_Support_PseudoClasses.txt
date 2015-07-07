@@ -1,0 +1,26 @@
+<html>
+<head>
+<style type="text/css">
+        span, a~~TEST_SELECTOR~~, .class1~~TEST_SELECTOR~~ {
+            color: orange;
+        }
+
+        div~~TEST_SELECTOR~~, span {
+            font-family: Arial;
+        }
+
+        a~~TEST_SELECTOR~~ {
+            font-size: 2em;
+        }
+
+        div {
+            background: red;
+        }
+    </style>
+</head>
+    <body>
+        <a href="https://www.postmarkapp.com">Postmark</a>
+        <span>Color should be red.</span>
+        <div>Color should be green.</div>
+    </body>
+</html>

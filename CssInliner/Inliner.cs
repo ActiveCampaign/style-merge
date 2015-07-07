@@ -26,6 +26,8 @@ namespace CssInliner
     /// </summary>
     public static class Inliner
     {
+        private static readonly Regex _pseudoclassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after)");
+
         /// <summary>
         /// Accepts a string of HTML and produces a string of HTML with styles inlined.
         /// </summary>
@@ -33,7 +35,6 @@ namespace CssInliner
         /// <returns></returns>
         public static String ProcessHtml(string sourceHtml)
         {
-
             var document = CQ.CreateDocument(sourceHtml);
 
             //Console.WriteLine(document.Document.DocType);
@@ -46,13 +47,13 @@ namespace CssInliner
             var sheets = document["style"].Elements.OfType<HTMLStyleElement>().ToArray();
 
             var parser = new ExCSS.Parser();
-            var parsedRules = new List<Tuple<HTMLStyleElement, StyleSheet>>();
+            var parsedStylesheets = new List<Tuple<HTMLStyleElement, StyleSheet>>();
 
             foreach (var k in sheets)
             {
                 try
                 {
-                    parsedRules.Add(Tuple.Create(k, parser.Parse(k.InnerHTML)));
+                    parsedStylesheets.Add(Tuple.Create(k, parser.Parse(k.InnerHTML)));
                 }
                 catch
                 {
@@ -63,17 +64,29 @@ namespace CssInliner
             var normalRules = new List<RuleTuple>();
             var importantRules = new List<RuleTuple>();
 
+
             //YIKES! this is hideous, but it's OK, it'll do what we need.
             var ruleIndex = 0;
-            foreach (var p in parsedRules)
+            foreach (var styleSheet in parsedStylesheets)
             {
-                var styleRules = p.Item2.StyleRules.ToArray();
+                var uninlineable = new List<Tuple<string, StyleDeclaration>>();
+
+                var styleRules = styleSheet.Item2.StyleRules.ToArray();
                 foreach (var s in styleRules)
                 {
-                    var selectors = s.Selector.ToString().Split(',');
+                    var selectors = s.Selector.ToString().Split(',').ToLookup(k => true);
+                    // MOST of the time, the selector isn't going to match.
+                    // Therefore, we avoid regexing each selector in the string
+                    // for only those cases where it does match.
+                    if (_pseudoclassSelector.IsMatch(s.Selector.ToString()))
+                    {
+                        selectors = s.Selector.ToString().Split(',').ToLookup(k => !_pseudoclassSelector.IsMatch(k));
+                    }
+
                     var importantAndNot = s.Declarations.ToLookup(k => k.Important);
 
-                    foreach (var selector in selectors)
+                    //inline the safe rules per normal.
+                    foreach (var selector in selectors[true])
                     {
                         ruleIndex++;
                         normalRules.Add(new RuleTuple()
@@ -88,22 +101,43 @@ namespace CssInliner
                         {
                             DocumentOrder = ruleIndex,
                             Declarations = importantAndNot[true]
-                                .Aggregate("", (seed, current) => seed += String.Format("{0}:{1};", current.Name, current.Term)),
+                                .Aggregate("", (seed, current) => seed += String.Format("{0}:{1} !important;", current.Name, current.Term)),
                             Selector = selector,
                             Specificity = new Specificity()
                         });
                     }
+
+                    if (selectors[false].Any())
+                    {
+                        uninlineable.Add(Tuple.Create(String.Join(",", selectors[false]), s.Declarations));
+                    }
                 }
 
-                //scrub these rules from the style blocks.
-                p.Item2.Rules.RemoveAll(k => k is StyleRule);
-                if (p.Item2.Rules.Any())
+                //scrub all rules from the stylesheet.
+                styleSheet.Item2.Rules.RemoveAll(k => k is StyleRule);
+
+                //if there are "left over" rules, we want to make sure those are applied.
+                foreach (var i in uninlineable)
                 {
-                    p.Item1.InnerText = p.Item2.ToString();
+                    foreach (var d in i.Item2)
+                    {
+                        d.Important = true;
+                    }
+
+                    styleSheet.Item2.Rules.Add(new StyleRule(i.Item2)
+                    {
+                        Value = i.Item1
+                    });
+                }
+
+                //apply the stylesheet content back to the CsQuery object.
+                if (styleSheet.Item2.Rules.Any())
+                {
+                    styleSheet.Item1.InnerText = styleSheet.Item2.ToString();
                 }
                 else
                 {
-                    p.Item1.Remove();
+                    styleSheet.Item1.Remove();
                 }
             }
 
