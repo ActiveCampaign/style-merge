@@ -61,18 +61,19 @@ namespace CssInliner.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;
-        ///&lt;html&gt;&lt;body&gt;
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
         ///&lt;style type=&quot;text/css&quot;&gt;
-        ///a:hover { color: green !important; }
-        ///a:active { color: purple !important; }
-        ///a:focus { color: yellow !important; }
-        ///a:visited { color: blue !important; }
-        ///a:target { color: orange !important; }
-        ///div:first-letter { color: white !important; }
-        ///div:first-line { color: lightgreen !important; }
-        ///div:before { color: pink !important; }
-        ///div:after { color: gray !importa [rest of string was truncated]&quot;;.
+        ///a~~TEST_SELECTOR~~,.class1~~TEST_SELECTOR~~ { color: orange !important; }
+        ///div~~TEST_SELECTOR~~ { font-family: Arial !important; }
+        ///a~~TEST_SELECTOR~~ { font-size: 2em !important; }
+        ///&lt;/style&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;a href=&quot;https://www.postmarkapp.com&quot;&gt;Postmark&lt;/a&gt;
+        ///        &lt;span style=&quot;color: orange; font-family: Arial;&quot;&gt;Color should be red.&lt;/span&gt;
+        ///        &lt;div style=&quot;background: red&quot;&gt;Color should be green.&lt;/div&gt;
+        ///&lt;/body&gt;&lt;/html&gt;.
         /// </summary>
         internal static string CssInliner_Should_Handle_PseudoClasses {
             get {
@@ -210,6 +211,15 @@ namespace CssInliner.Tests {
         internal static string Expected_Specificity_Ordering_Test {
             get {
                 return ResourceManager.GetString("Expected_Specificity_Ordering_Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string inliner_should_maintain_important_declaration {
+            get {
+                return ResourceManager.GetString("inliner_should_maintain_important_declaration", resourceCulture);
             }
         }
         

@@ -1,0 +1,16 @@
+<html>
+<head>
+<style>
+html, body{
+color: blue;
+background: red !important;
+}
+
+a:hover {
+display:none !important;
+}
+</style>
+<body>
+<a href="http://www.example.com">All out</a>
+</body>
+</html>

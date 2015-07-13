@@ -1,0 +1,5 @@
+<html style="color: blue; background: red !important;"><head>
+<style>a:hover{display:none !important;}</style>
+</head><body style="color: blue; background: red !important;">
+<a href="http://www.example.com">All out</a>
+</body></html>

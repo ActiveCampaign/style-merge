@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsQuery, Version=1.3.3.249, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="xunit.abstractions">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
@@ -62,6 +66,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="InlinerBenchmarkHarness.cs" />
     <Compile Include="InlinerTestFixture.cs" />
     <Compile Include="Inputs.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -109,6 +114,8 @@
     <None Include="Resources\inlined_url_declarations_should_not_have_spaces_added.txt" />
     <Content Include="Resources\InlinerShouldKeepMediaQueryStylesInStyleBlocks.html" />
     <None Include="Resources\Inliner_Should_Support_PseudoClasses.txt" />
+    <None Include="Resources\inliner_should_maintain_important_stats.txt" />
+    <None Include="Resources\inliner_should_maintain_important_declaration.txt" />
     <Content Include="Resources\Specificity_Ordering_Test.html" />
   </ItemGroup>
   <ItemGroup>

@@ -143,7 +143,54 @@ namespace CssInliner.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///&lt;style&gt;
+        ///html, body{
+        ///color: blue;
+        ///background: red !important;
+        ///}
+        ///
+        ///a:hover {
+        ///display:none !important;
+        ///}
+        ///&lt;/style&gt;
+        ///&lt;body&gt;
+        ///&lt;a href=&quot;http://www.example.com&quot;&gt;All out&lt;/a&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string inliner_should_maintain_important_stats {
+            get {
+                return ResourceManager.GetString("inliner_should_maintain_important_stats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///&lt;style type=&quot;text/css&quot;&gt;
+        ///        span, a~~TEST_SELECTOR~~, .class1~~TEST_SELECTOR~~ {
+        ///            color: orange;
+        ///        }
+        ///
+        ///        div~~TEST_SELECTOR~~, span {
+        ///            font-family: Arial;
+        ///        }
+        ///
+        ///        a~~TEST_SELECTOR~~ {
+        ///            font-size: 2em;
+        ///        }
+        ///
+        ///        div {
+        ///            background: red;
+        ///        }
+        ///    &lt;/style&gt;
+        ///&lt;/head&gt;
+        ///    &lt;body&gt;
+        ///        &lt;a href=&quot;https://www.postmarkapp.com&quot;&gt;Postmark&lt;/a&gt;
+        ///        &lt;span&gt;Color should be red.&lt;/span&gt;
+        ///        &lt;div&gt;Color [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Inliner_Should_Support_PseudoClasses {
             get {

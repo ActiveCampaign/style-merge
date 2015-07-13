@@ -112,6 +112,13 @@ namespace CssInliner.Tests
         }
 
         [Fact]
+        public void InlinerShouldMaintainImportantDeclarations()
+        {
+            var processed = Inliner.ProcessHtml(Inputs.inliner_should_maintain_important_stats).EliminateWhitespace();
+            Assert.Equal(Outputs.inliner_should_maintain_important_declaration.EliminateWhitespace(), processed);
+        }
+
+        [Fact]
         public void InlinerCanParseAndInlineEmailACIDTestCSS()
         {
             //TODO: this should attempt to produce exactly same result as Premailer.

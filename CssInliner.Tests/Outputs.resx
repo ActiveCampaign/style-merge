@@ -142,6 +142,9 @@
   <data name="Expected_Specificity_Ordering_Test" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\expected_specificity_ordering_test.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="inliner_should_maintain_important_declaration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\inliner_should_maintain_important_declaration.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="style_sheet_attributes_with_quotes_should_be_handled_properly" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\style_sheet_attributes_with_quotes_should_be_handled_properly.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
