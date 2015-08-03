@@ -1,0 +1,52 @@
+version: 1.0.{build}
+
+branches:
+  except:
+    - gh-pages
+
+os: Windows Server 2012
+
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "1.0.{build}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+nuget:
+  account_feed: true
+  project_feed: true
+
+platform: Any CPU
+configuration: Release
+
+build:
+  project: ./CssInliner.sln
+  # quiet|minimal|normal|detailed
+  verbosity: normal
+
+test:
+  assemblies:
+    - '**\*.Tests.dll'
+
+after_test:
+  - ps: nuget.exe pack ./CssInliner/CssInliner.nuspec -Version $env:APPVEYOR_BUILD_VERSION
+
+artifacts:
+  - path: '*.nupkg'
+
+deploy:
+  # Deploying to NuGet feed
+  - provider: NuGet
+    api_key:
+      secure: sKvwxg5DmHjLtvBb0YEo9M+JYle83QWCDiGWfWOGOP6mQflp48qg1C5MJeNCw9cE
+    skip_symbols: true
+    on:
+      appveyor_repo_tag: true
+
+notifications:
+  # HipChat
+  - provider: HipChat
+    auth_token:
+      secure: OqT/6oTT5wCUSt4rajfZ/Ye1K0lz8nUJzj2KFtoIwmMo6QtjSuGIhf/RGIu0uXIr
+    room: Postmark
