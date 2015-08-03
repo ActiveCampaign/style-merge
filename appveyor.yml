@@ -21,7 +21,7 @@ platform: Any CPU
 configuration: Release
 
 build:
-  project: ./CssInliner.sln
+  project: ./StyleMerge.sln
   # quiet|minimal|normal|detailed
   verbosity: normal
 
@@ -30,7 +30,7 @@ test:
     - '**\*.Tests.dll'
 
 after_test:
-  - ps: nuget.exe pack ./CssInliner/CssInliner.nuspec -Version $env:APPVEYOR_BUILD_VERSION
+  - ps: nuget.exe pack ./StyleMerge/StyleMerge.nuspec -Version $env:APPVEYOR_BUILD_VERSION
 
 artifacts:
   - path: '*.nupkg'

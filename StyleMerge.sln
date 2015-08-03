@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CssInliner", "CssInliner\CssInliner.csproj", "{AEFB167B-8D05-481A-BCD3-B69184157BC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StyleMerge", "StyleMerge\StyleMerge.csproj", "{AEFB167B-8D05-481A-BCD3-B69184157BC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CssInliner.Tests", "CssInliner.Tests\CssInliner.Tests.csproj", "{A22D7709-ABBF-452B-BB73-B37F95689A04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StyleMerge.Tests", "StyleMerge.Tests\StyleMerge.Tests.csproj", "{A22D7709-ABBF-452B-BB73-B37F95689A04}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CA9A9CD5-CEE5-4CA3-A392-462483D80953}"
 	ProjectSection(SolutionItems) = preProject

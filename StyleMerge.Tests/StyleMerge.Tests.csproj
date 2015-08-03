@@ -100,7 +100,7 @@
     <None Include="Resources\universal_selector_shouldnt_apply_styles_to_head_and_children.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CssInliner\CssInliner.csproj">
+    <ProjectReference Include="..\StyleMerge\StyleMerge.csproj">
       <Project>{aefb167b-8d05-481a-bcd3-b69184157bc3}</Project>
       <Name>CssInliner</Name>
     </ProjectReference>
