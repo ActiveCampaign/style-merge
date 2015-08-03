@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Xunit;
+using Xunit.Extensions;
 
 namespace CssInliner.Tests
 {
