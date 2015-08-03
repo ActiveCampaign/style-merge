@@ -4,11 +4,9 @@ using ExCSS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace CssInliner
+namespace StyleMerge
 {
     /// <summary>
     /// A selector, with specificity, and declarations.

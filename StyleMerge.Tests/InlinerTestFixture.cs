@@ -1,4 +1,4 @@
-﻿using CssInliner;
+﻿using StyleMerge;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Extensions;
 
-namespace CssInliner.Tests
+namespace StyleMerge.Tests
 {
     internal static class WhitespaceNormalizer
     {

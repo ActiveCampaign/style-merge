@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>CssInliner</id>
+    <id>StyleMerge</id>
     <version>$version$</version>
-    <title>CSS Inliner</title>
+    <title>StyleMerge</title>
     <authors>Wildbit,LLC</authors>
     <owners>wildbit,atheken</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>https://github.com/wildbit/css-inliner</projectUrl>
+    <projectUrl>https://github.com/wildbit/style-merge</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A powerful, simple, CSS Inliner.</description>
     <copyright>Copyright 2015</copyright>

@@ -1,12 +1,8 @@
 ﻿using CsQuery;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CssInliner.Tests
+namespace StyleMerge.Tests
 {
     public class InlinerBenchmarkHarness
     {
