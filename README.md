@@ -1,4 +1,4 @@
-<img src="http://assets.wildbit.com/postmark/misc/style-merge.png" alt="StyleMerge" width="147" height="147">
+<img src="http://assets.wildbit.com/postmark/misc/style-merge@2x.png" alt="StyleMerge" width="147" height="147">
 # StyleMerge
 Simple CSS inlining, for email, for C# and other .net-based languages.
 
