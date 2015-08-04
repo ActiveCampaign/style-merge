@@ -1,4 +1,4 @@
-![alt Logo](https://raw.githubusercontent.com/wildbit/style-merge/master/style-merge%402x.png)
+![StyleMerge](http://assets.wildbit.com/postmark/misc/style-merge.png)
 # StyleMerge
 Simple CSS inlining, for email, for C# and other .net-based languages.
 
