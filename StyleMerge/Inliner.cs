@@ -69,7 +69,7 @@ namespace StyleMerge
             {
                 var uninlineable = new List<Tuple<string, StyleDeclaration>>();
 
-                var styleRules = styleSheet.Item2.StyleRules.ToArray();
+                var styleRules = styleSheet.Item2.StyleRules.Where(s => s.Selector != null).ToArray();
                 foreach (var s in styleRules)
                 {
                     var selectors = s.Selector.ToString().Split(',').ToLookup(k => true);

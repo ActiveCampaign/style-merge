@@ -139,6 +139,9 @@
   <data name="Expected_InlinerShouldKeepMediaQueryStylesInStyleBlocks" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\expected_inlinershouldkeepmediaquerystylesinstyleblocks.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="Expected_InlinerShouldSkipInvalidCSSDeclarations" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Expected_InlinerShouldSkipInvalidCSSDeclarations.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="Expected_Specificity_Ordering_Test" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\expected_specificity_ordering_test.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

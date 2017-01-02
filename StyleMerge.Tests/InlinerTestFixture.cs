@@ -104,7 +104,6 @@ namespace StyleMerge.Tests
             Assert.Equal(Outputs.universal_selector_doesnt_apply_to_head.EliminateWhitespace(), processed);
         }
 
-
         [Fact]
         public void InlinerShouldProperlyHandleDoubleQuotesInDeclarations()
         {
@@ -117,6 +116,13 @@ namespace StyleMerge.Tests
         {
             var processed = Inliner.ProcessHtml(Inputs.inliner_should_maintain_important_stats).EliminateWhitespace();
             Assert.Equal(Outputs.inliner_should_maintain_important_declaration.EliminateWhitespace(), processed);
+        }
+
+        [Fact]
+        public void InlinerShouldSkipInvalidCSSDeclarations()
+        {
+            var html = Inliner.ProcessHtml(Inputs.InlinerShouldSkipInvalidCSSDeclarations).EliminateWhitespace();
+            Assert.Equal(Outputs.Expected_InlinerShouldSkipInvalidCSSDeclarations.EliminateWhitespace(), html);
         }
 
         [Fact]
