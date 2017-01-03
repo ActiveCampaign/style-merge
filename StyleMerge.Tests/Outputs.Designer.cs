@@ -193,6 +193,24 @@ namespace StyleMerge.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;
+        ///    &lt;head&gt;
+        ///        &lt;style&gt;
+        ///            body
+        ///        &lt;/style&gt;
+        ///    &lt;/head&gt;
+        ///&lt;body&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string Expected_InlinerShouldSkipInvalidCSSDeclarations {
+            get {
+                return ResourceManager.GetString("Expected_InlinerShouldSkipInvalidCSSDeclarations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
         ///&lt;style type=&quot;text/css&quot;&gt;

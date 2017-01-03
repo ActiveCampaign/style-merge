@@ -351,6 +351,29 @@ namespace StyleMerge.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;
+        ///    &lt;head&gt;
+        ///        &lt;style&gt;
+        ///            div {
+        ///                color: #000;
+        ///            }
+        ///
+        ///            #foo
+        ///        &lt;/style&gt;
+        ///    &lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;div id=&quot;foo&quot;&gt;&lt;/div&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string InlinerShouldSkipInvalidCSSDeclarations {
+            get {
+                return ResourceManager.GetString("InlinerShouldSkipInvalidCSSDeclarations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;head&gt;
         ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
         ///    &lt;title&gt;&lt;/title&gt;

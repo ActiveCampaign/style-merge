@@ -112,6 +112,8 @@
     <None Include="Resources\Inliner_Should_Support_PseudoClasses.txt" />
     <None Include="Resources\inliner_should_maintain_important_stats.txt" />
     <None Include="Resources\inliner_should_maintain_important_declaration.txt" />
+    <Content Include="Resources\Expected_InlinerShouldSkipInvalidCSSDeclarations.html" />
+    <Content Include="Resources\InlinerShouldSkipInvalidCSSDeclarations.html" />
     <Content Include="Resources\Specificity_Ordering_Test.html" />
   </ItemGroup>
   <ItemGroup>
