@@ -24,7 +24,7 @@ namespace StyleMerge
     /// </summary>
     public static class Inliner
     {
-        private static readonly Regex _pseudoclassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after)");
+        private static readonly Regex _pseudoclassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after|root)");
 
         /// <summary>
         /// Accepts a string of HTML and produces a string of HTML with styles inlined.
