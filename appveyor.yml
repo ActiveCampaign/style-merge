@@ -1,45 +1,20 @@
 version: 1.0.{build}
-
-branches:
-  except:
-    - gh-pages
-
-os: Windows Server 2012
-
 assembly_info:
   patch: true
-  file: AssemblyInfo.*
-  assembly_version: "1.0.{build}"
-  assembly_file_version: "{version}"
-  assembly_informational_version: "{version}"
-
-nuget:
-  account_feed: true
-  project_feed: true
-
-platform: Any CPU
-configuration: Release
-
+  file: '**\AssemblyInfo.*'
+  assembly_version: 1.0.{build}
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
 build:
   project: ./StyleMerge.sln
-  # quiet|minimal|normal|detailed
-  verbosity: normal
-
-test:
-  assemblies:
-    - '**\*.Tests.dll'
-
-after_test:
-  - ps: nuget.exe pack ./StyleMerge/StyleMerge.nuspec -Version $env:APPVEYOR_BUILD_VERSION
-
+  publish_nuget: true
+  verbosity: minimal
 artifacts:
-  - path: '*.nupkg'
-
+- path: '*.nupkg'
 deploy:
-  # Deploying to NuGet feed
-  - provider: NuGet
-    api_key:
-      secure: 3LuYRvi5UZEqsm2EKn0K6uDql0E9jLnxVtJiely0RFEmnLKtMahpbQwbj4Ao7Mfg
-    skip_symbols: true
-    on:
-      appveyor_repo_tag: true
+- provider: NuGet
+  api_key:
+    secure: NECXRcP/sdaNCCRpcoiyvutr0X9bc93mGyyXll2ouwCbwHGR5fXL+vXIAxwlz5gc
+  skip_symbols: true
+  on:
+    APPVEYOR_REPO_TAG: true
