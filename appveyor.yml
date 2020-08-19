@@ -39,14 +39,7 @@ deploy:
   # Deploying to NuGet feed
   - provider: NuGet
     api_key:
-      secure: sKvwxg5DmHjLtvBb0YEo9M+JYle83QWCDiGWfWOGOP6mQflp48qg1C5MJeNCw9cE
+      secure: 3LuYRvi5UZEqsm2EKn0K6uDql0E9jLnxVtJiely0RFEmnLKtMahpbQwbj4Ao7Mfg
     skip_symbols: true
     on:
       appveyor_repo_tag: true
-
-notifications:
-  # HipChat
-  - provider: HipChat
-    auth_token:
-      secure: OqT/6oTT5wCUSt4rajfZ/Ye1K0lz8nUJzj2KFtoIwmMo6QtjSuGIhf/RGIu0uXIr
-    room: Postmark
