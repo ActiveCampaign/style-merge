@@ -9,7 +9,7 @@ jobs:
       - run:
           name: "Build the projects"
           command:
-            dotnet build --configuration release src/
+            dotnet build
   test:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
@@ -18,7 +18,7 @@ jobs:
       - run:
           name: "Run the Tests"
           command:
-            dotnet test --configuration release src/
+            dotnet test
   release:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
