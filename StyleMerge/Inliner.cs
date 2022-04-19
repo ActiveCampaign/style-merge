@@ -17,9 +17,8 @@ namespace StyleMerge
     internal class RuleTuple
     {
         public int DocumentOrder { get; set; }
-        public Specificity Specificity { get; set; }
         public string Selector { get; set; }
-        //public string Declarations { get; set; }
+        public Specificity Specificity { get; set; }
         public IEnumerable<IProperty> Properties { get; set; }
     }
 
@@ -30,10 +29,9 @@ namespace StyleMerge
     {
         private static readonly Regex PseudoClassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after|root)");
         private static readonly Regex DocTypeFinder = new Regex("^<!DOCTYPE [^>]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-        private static readonly StylesheetParser StyleParser = new StylesheetParser();
-
-        public static IHtmlParser HtmlParser { get; }
-        public static ICssParser CssParser { get; }
+        private static readonly StylesheetParser StylesheetParser = new StylesheetParser();
+        public static readonly IHtmlParser HtmlParser;
+        public static readonly ICssParser CssParser;
 
         static Inliner()
         {
@@ -48,9 +46,6 @@ namespace StyleMerge
         /// <param name="sourceHtml"></param>
         public static string ProcessHtml(string sourceHtml)
         {
-            //var context = BrowsingContext.New(Configuration.Default.WithCss());
-            //var htmlParser = context.GetService<IHtmlParser>();
-            //var cssParser = context.GetService<ICssParser>();
             var document = HtmlParser.ParseDocument(sourceHtml);
 
             foreach (var s in document.GetElementsByTagName("script"))
@@ -64,7 +59,7 @@ namespace StyleMerge
             {
                 try
                 {
-                    styleSheets.Add((element, StyleParser.Parse(element.InnerHtml)));
+                    styleSheets.Add((element, StylesheetParser.Parse(element.InnerHtml)));
                 }
                 catch
                 {
@@ -95,15 +90,13 @@ namespace StyleMerge
 
                     var importantAndNot = rule.Style.ToLookup(k => k.IsImportant);
 
-                    //inline the safe rules per normal.
+                    // Inline the safe rules per normal.
                     foreach (var selector in selectors[true])
                     {
                         ruleIndex++;
                         normalRules.Add(new RuleTuple
                         {
                             DocumentOrder = ruleIndex,
-                            //Declarations = importantAndNot[false]
-                            //    .Aggregate("", (seed, current) => seed += $"{current.Name}:{current.Value};"),
                             Properties = importantAndNot[false].ToArray(),
                             Selector = selector,
                             Specificity = selector.Specificity()
@@ -111,8 +104,6 @@ namespace StyleMerge
                         importantRules.Add(new RuleTuple
                         {
                             DocumentOrder = ruleIndex,
-                            //Declarations = importantAndNot[true]
-                            //    .Aggregate("", (seed, current) => seed += $"{current.Name}:{current.Value} !important;"),
                             Properties = importantAndNot[true].ToArray(),
                             Selector = selector,
                             Specificity = new Specificity()
