@@ -1,12 +1,6 @@
 version: 1.0.{build}
 configuration: Release
 platform: Any CPU
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: 1.0.{build}
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
 build:
   project: ./StyleMerge.sln
   publish_nuget: true
