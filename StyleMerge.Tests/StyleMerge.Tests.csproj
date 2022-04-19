@@ -6,18 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
-    <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
-    <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
-    <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Input.html" />
-    <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Output.html" />
-    <None Remove="TestCases\ShouldEliminateScriptBlocks\Input.html" />
-    <None Remove="TestCases\ShouldEliminateScriptBlocks\Output.html" />
-    <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Input.html" />
-    <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Output.html" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -35,10 +23,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
+    <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
+    <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
+    <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Input.html" />
+    <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Output.html" />
+    <None Remove="TestCases\ShouldEliminateScriptBlocks\Input.html" />
+    <None Remove="TestCases\ShouldEliminateScriptBlocks\Output.html" />
+    <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Input.html" />
+    <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Output.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="TestCases\**\*" />
-    <EmbeddedResource Include="Resources\HTML5_Boilerplate.html" />
-    <EmbeddedResource Include="Resources\Malformed_HTML_1.html" />
-    <EmbeddedResource Include="Resources\Malformed_HTML_2.html" />
   </ItemGroup>
 
 </Project>
