@@ -1,10 +1,13 @@
-﻿using CsQuery;
-using CsQuery.Implementation;
-using ExCSS;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AngleSharp;
+using AngleSharp.Css.Parser;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
+using ExCSS;
 
 namespace StyleMerge
 {
@@ -14,9 +17,9 @@ namespace StyleMerge
     internal class RuleTuple
     {
         public int DocumentOrder { get; set; }
-        public Specificity Specificity { get; set; }
         public string Selector { get; set; }
-        public string Declarations { get; set; }
+        public Specificity Specificity { get; set; }
+        public IEnumerable<IProperty> Properties { get; set; }
     }
 
     /// <summary>
@@ -24,82 +27,84 @@ namespace StyleMerge
     /// </summary>
     public static class Inliner
     {
-        private static readonly Regex _pseudoclassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after|root)");
+        private static readonly Regex PseudoClassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after|root)");
+        private static readonly Regex DocTypeFinder = new Regex("^<!DOCTYPE [^>]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        private static readonly StylesheetParser StylesheetParser = new StylesheetParser();
+        public static readonly IHtmlParser HtmlParser;
+        public static readonly ICssParser CssParser;
+
+        static Inliner()
+        {
+            var context = BrowsingContext.New(Configuration.Default.WithCss());
+            HtmlParser = context.GetService<IHtmlParser>();
+            CssParser = context.GetService<ICssParser>();
+        }
 
         /// <summary>
         /// Accepts a string of HTML and produces a string of HTML with styles inlined.
         /// </summary>
         /// <param name="sourceHtml"></param>
-        /// <returns></returns>
-        public static String ProcessHtml(string sourceHtml)
+        public static string ProcessHtml(string sourceHtml)
         {
-            var document = CQ.CreateDocument(sourceHtml);
+            var document = HtmlParser.ParseDocument(sourceHtml);
 
-            //Console.WriteLine(document.Document.DocType);
-
-            foreach (var s in document["script"].Elements)
+            foreach (var s in document.GetElementsByTagName("script"))
             {
                 s.Remove();
             }
 
-            var sheets = document["style"].Elements.OfType<HTMLStyleElement>().ToArray();
+            var styleSheets = new List<(IElement Element, Stylesheet Styles)>();
 
-            var parser = new ExCSS.Parser();
-            var parsedStylesheets = new List<Tuple<HTMLStyleElement, StyleSheet>>();
-
-            foreach (var k in sheets)
+            foreach (var element in document.GetElementsByTagName("style").ToArray())
             {
                 try
                 {
-                    parsedStylesheets.Add(Tuple.Create(k, parser.Parse(k.InnerHTML)));
+                    styleSheets.Add((element, StylesheetParser.Parse(element.InnerHtml)));
                 }
                 catch
                 {
-                    throw new InliningException("Not all stylesheet declarations in stylesheet beginning with '" + k.InnerHTML.Substring(0, 100) + "...' could be parsed.");
+                    throw new InliningException("Not all stylesheet declarations in stylesheet beginning with '" + element.InnerHtml.Substring(0, 100) + "...' could be parsed.");
                 }
             }
 
             var normalRules = new List<RuleTuple>();
             var importantRules = new List<RuleTuple>();
 
-
             //YIKES! this is hideous, but it's OK, it'll do what we need.
             var ruleIndex = 0;
-            foreach (var styleSheet in parsedStylesheets)
+            foreach (var styleSheet in styleSheets)
             {
-                var uninlineable = new List<Tuple<string, StyleDeclaration>>();
+                var uninlineable = new List<(string Selector, StyleDeclaration Style)>();
 
-                var styleRules = styleSheet.Item2.StyleRules.Where(s => s.Selector != null).ToArray();
-                foreach (var s in styleRules)
+                var styleRules = styleSheet.Styles.StyleRules.Where(s => s.Selector != null).ToArray();
+                foreach (var rule in styleRules)
                 {
-                    var selectors = s.Selector.ToString().Split(',').ToLookup(k => true);
+                    var selectors = rule.SelectorText.Split(',').ToLookup(k => true);
                     // MOST of the time, the selector isn't going to match.
                     // Therefore, we avoid regexing each selector in the string
                     // for only those cases where it does match.
-                    if (_pseudoclassSelector.IsMatch(s.Selector.ToString()))
+                    if (PseudoClassSelector.IsMatch(rule.SelectorText))
                     {
-                        selectors = s.Selector.ToString().Split(',').ToLookup(k => !_pseudoclassSelector.IsMatch(k));
+                        selectors = rule.SelectorText.Split(',').ToLookup(k => !PseudoClassSelector.IsMatch(k));
                     }
 
-                    var importantAndNot = s.Declarations.ToLookup(k => k.Important);
+                    var importantAndNot = rule.Style.ToLookup(k => k.IsImportant);
 
-                    //inline the safe rules per normal.
+                    // Inline the safe rules per normal.
                     foreach (var selector in selectors[true])
                     {
                         ruleIndex++;
-                        normalRules.Add(new RuleTuple()
+                        normalRules.Add(new RuleTuple
                         {
                             DocumentOrder = ruleIndex,
-                            Declarations = importantAndNot[false]
-                                .Aggregate("", (seed, current) => seed += String.Format("{0}:{1};", current.Name, current.Term)),
+                            Properties = importantAndNot[false].ToArray(),
                             Selector = selector,
                             Specificity = selector.Specificity()
                         });
-                        importantRules.Add(new RuleTuple()
+                        importantRules.Add(new RuleTuple
                         {
                             DocumentOrder = ruleIndex,
-                            Declarations = importantAndNot[true]
-                                .Aggregate("", (seed, current) => seed += String.Format("{0}:{1} !important;", current.Name, current.Term)),
+                            Properties = importantAndNot[true].ToArray(),
                             Selector = selector,
                             Specificity = new Specificity()
                         });
@@ -107,63 +112,67 @@ namespace StyleMerge
 
                     if (selectors[false].Any())
                     {
-                        uninlineable.Add(Tuple.Create(String.Join(",", selectors[false]), s.Declarations));
+                        uninlineable.Add((string.Join(",", selectors[false]), rule.Style));
                     }
                 }
 
-                //scrub all rules from the stylesheet.
-                styleSheet.Item2.Rules.RemoveAll(k => k is StyleRule);
-
-                //if there are "left over" rules, we want to make sure those are applied.
-                foreach (var i in uninlineable)
+                // Scrub all rules from the stylesheet
+                var removeRules = styleSheet.Styles.StyleRules.ToArray();
+                foreach (var rule in removeRules)
                 {
-                    foreach (var d in i.Item2)
-                    {
-                        d.Important = true;
-                    }
-
-                    styleSheet.Item2.Rules.Add(new StyleRule(i.Item2)
-                    {
-                        Value = i.Item1
-                    });
+                    styleSheet.Styles.RemoveChild(rule);
                 }
 
-                //apply the stylesheet content back to the CsQuery object.
-                if (styleSheet.Item2.Rules.Any())
+                // If there are "left over" rules that could not be inlined (ie. pseudoselectors), we need 
+                // to make sure those are applied back to the stylesheet so they do not just disappear
+                foreach (var (Selector, Style) in uninlineable)
                 {
-                    styleSheet.Item1.InnerText = styleSheet.Item2.ToString();
+                    var declarations = Style.Declarations.Select(x => $"{x.Name}: {x.Value} !important");
+                    var rule = styleSheet.Styles.Add(RuleType.Style);
+                    rule.Text = $"{Selector} {{ {string.Join(";", declarations)} }}";
+                }
+
+                // Apply the stylesheet content back to the element
+                if (styleSheet.Styles.CharacterSetRules.Any() ||
+                    styleSheet.Styles.FontfaceSetRules.Any() ||
+                    styleSheet.Styles.ImportRules.Any() ||
+                    styleSheet.Styles.MediaRules.Any() ||
+                    styleSheet.Styles.NamespaceRules.Any() ||
+                    styleSheet.Styles.PageRules.Any() ||
+                    styleSheet.Styles.StyleRules.Any())
+                {
+                    styleSheet.Element.TextContent = styleSheet.Styles.ToCss();
                 }
                 else
                 {
-                    styleSheet.Item1.Remove();
+                    styleSheet.Element.Remove();
                 }
             }
 
-
-            var noApplyElements = new HashSet<IDomElement>(document.Select("head").Elements.SelectMany(k => GetAllChildren(k)));
+            var noApplyElements = new HashSet<IElement>(
+                document.GetElementsByTagName("head")
+                    .SelectMany(k => GetChildrenAndSelf(k)));
 
             ApplyRulesToElements(document, normalRules, noApplyElements);
             ApplyRulesToElements(document, importantRules, noApplyElements);
 
             //fix to original doctype
-            var processed = document.Render();
-            var m = _doctypeFinder.Match(sourceHtml);
+            var processed = document.ToHtml();
+            var m = DocTypeFinder.Match(sourceHtml);
             if (m.Success)
             {
-                processed = _doctypeFinder.Replace(processed, m.Value);
+                processed = DocTypeFinder.Replace(processed, m.Value);
             }
 
             return processed;
         }
 
-        private static IEnumerable<IDomElement> GetAllChildren(IDomElement element)
+        private static IEnumerable<IElement> GetChildrenAndSelf(IElement element)
         {
-            return element.ChildElements.SelectMany(GetAllChildren).Concat(new IDomElement[] { element });
+            return element.Children.SelectMany(GetChildrenAndSelf).Concat(new IElement[] { element });
         }
 
-        private static Regex _doctypeFinder = new Regex("^<!DOCTYPE [^>]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
-        private static void ApplyRulesToElements(CQ document, IEnumerable<RuleTuple> rules, HashSet<IDomElement> noApply)
+        private static void ApplyRulesToElements(IHtmlDocument document, IEnumerable<RuleTuple> rules, HashSet<IElement> noApply)
         {
             var sortedRules = rules.OrderBy(k => k.Specificity).ThenBy(k => k.DocumentOrder);
 
@@ -171,10 +180,17 @@ namespace StyleMerge
             {
                 try
                 {
-                    //all the elements except for those determined to not get styles.
-                    foreach (var a in document[rule.Selector].Elements.Where(k => !noApply.Contains(k)))
+                    // All elements except for those determined to not get styles.
+                    foreach (var node in document.QuerySelectorAll(rule.Selector).Where(k => !noApply.Contains(k)))
                     {
-                        a.Style.AddStyles(rule.Declarations, false);
+                        var styles = CssParser.ParseDeclaration(node.GetAttribute("style") ?? string.Empty);
+                        
+                        foreach (var prop in rule.Properties)
+                        {
+                            styles.SetProperty(prop.Name, prop.Value, prop.IsImportant ? "important" : null);
+                        }
+
+                        node.SetAttribute("style", styles.ToCss());
                     }
                 }
                 catch (NotImplementedException ex)

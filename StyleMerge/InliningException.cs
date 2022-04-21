@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StyleMerge
 {
@@ -14,7 +10,6 @@ namespace StyleMerge
         public InliningException(string message)
             : base(message)
         {
-
         }
     }
 }

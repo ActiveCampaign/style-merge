@@ -1,8 +1,0 @@
-<html style="color:purple">
-<head>
-<link href="./style.css" type="text/css" rel="Stylesheet">
-</head>
-<body style="color:purple">
-<span style="color:purple">ASDF</span>
-</body>
-</html>

@@ -5,12 +5,12 @@
     <version>$version$</version>
     <title>StyleMerge</title>
     <authors>Wildbit,LLC</authors>
-    <owners>wildbit,atheken</owners>
+    <owners>wildbit</owners>
     <projectUrl>https://github.com/wildbit/style-merge</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A powerful, simple, CSS Inliner.</description>
     <iconUrl>https://raw.githubusercontent.com/wildbit/style-merge/master/style-merge%402x.png</iconUrl>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2022</copyright>
     <tags>CSS HTML</tags>
     <dependencies>
       <dependency id="CsQuery" version="1.3.4" />

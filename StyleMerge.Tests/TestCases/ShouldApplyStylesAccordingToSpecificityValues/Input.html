@@ -1,0 +1,24 @@
+﻿<html>
+<head>
+    <style>
+        #main {
+            background-color: rgba(255, 0, 0, 1);
+        }
+
+        .less-specific, .more-specific {
+            /* Should not be applied to the #main element (id selector is more specific), but it
+            should apply to the ul, since a class selector is more specific than an element selector */
+            background-color: rgba(0, 0, 255, 1);
+        }
+
+        ul {
+            background-color: rgba(0, 255, 0, 1);
+            font-family: Arial;
+        }
+    </style>
+</head>
+<body>
+    <div id="main" class="less-specific"></div>
+    <ul class="more-specific"></ul>
+</body>
+</html>

@@ -1,178 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A22D7709-ABBF-452B-BB73-B37F95689A04}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StyleMerge.Tests</RootNamespace>
-    <AssemblyName>StyleMerge.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <TargetFramework>net6.0</TargetFramework>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="CsQuery, Version=1.3.3.249, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.extensions, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; EmbeddedResourcefiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="1.3.0">
+      <IncludeAssets>runtime; build; native; EmbeddedResourcefiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise />
-  </Choose>
+
   <ItemGroup>
-    <Compile Include="InlinerBenchmarkHarness.cs" />
-    <Compile Include="InlinerTestFixture.cs" />
-    <Compile Include="Inputs.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Inputs.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Outputs.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Outputs.resx</DependentUpon>
-    </Compile>
+    <ProjectReference Include="..\StyleMerge\StyleMerge.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="Outputs.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Outputs.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Inputs.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Inputs.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
+    <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
+    <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
+    <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Input.html" />
+    <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Output.html" />
+    <None Remove="TestCases\ShouldEliminateScriptBlocks\Input.html" />
+    <None Remove="TestCases\ShouldEliminateScriptBlocks\Output.html" />
+    <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Input.html" />
+    <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Output.html" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Resources\zurb_example_1.html" />
+    <EmbeddedResource Include="TestCases\**\*" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\EmailACIDTest.txt" />
-    <None Include="Resources\CssInliner_Should_Handle_PseudoClasses.txt" />
-    <Content Include="Resources\Expected_InlinerShouldKeepMediaQueryStylesInStyleBlocks.html" />
-    <Content Include="Resources\HTML5_Boilerplate.html" />
-    <None Include="Resources\style_sheet_attributes_with_quotes_should_be_handled_properly.txt" />
-    <None Include="Resources\universal_selector_doesnt_apply_to_head.txt" />
-    <None Include="Resources\universal_selector_shouldnt_apply_styles_to_head_and_children.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StyleMerge\StyleMerge.csproj">
-      <Project>{aefb167b-8d05-481a-bcd3-b69184157bc3}</Project>
-      <Name>CssInliner</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\html_with_double_quote_doctype.txt" />
-    <None Include="Resources\inlined_url_declarations_should_not_have_spaces_added.txt" />
-    <Content Include="Resources\InlinerShouldKeepMediaQueryStylesInStyleBlocks.html" />
-    <None Include="Resources\Inliner_Should_Support_PseudoClasses.txt" />
-    <None Include="Resources\inliner_should_maintain_important_stats.txt" />
-    <None Include="Resources\inliner_should_maintain_important_declaration.txt" />
-    <Content Include="Resources\Expected_InlinerShouldSkipInvalidCSSDeclarations.html" />
-    <Content Include="Resources\InlinerShouldSkipInvalidCSSDeclarations.html" />
-    <Content Include="Resources\Specificity_Ordering_Test.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Expected_Specificity_Ordering_Test.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\InlinerShouldEliminateScriptBlocks.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Expected_InlinerShouldEliminateScriptBlocks.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\InlinerShouldApplyStylesInDocumentOrder.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Expected_InlinerShouldApplyStylesInDocumentOrder.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Expected_InlinerShouldApplyStylesAccordingToSpecificityValues.html" />
-    <Content Include="Resources\Expected_InlinerShouldApplyStylesForRulesWithMultipleSelectors.html" />
-    <Content Include="Resources\Expected_InlinerShouldEliminateStyleBlocksWhereAllRulesAreInlined.html" />
-    <Content Include="Resources\InlinerShouldApplyStylesAccordingToSpecificityValues.html" />
-    <Content Include="Resources\InlinerShouldApplyStylesForRulesWithMultipleSelectors.html" />
-    <Content Include="Resources\InlinerShouldEliminateStyleBlocksWhereAllRulesAreInlined.html" />
-    <Content Include="Resources\Malformed_HTML_1.html" />
-    <Content Include="Resources\Malformed_HTML_2.html" />
-  </ItemGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
