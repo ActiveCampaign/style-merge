@@ -1,4 +1,4 @@
-![StyleMerge](http://assets.wildbit.com/postmark/misc/style-merge.png)
+![StyleMerge](https://newsletter.postmarkapp.com/assets/images/open-source/style-merge.png)
 # StyleMerge
 Simple CSS inlining, for email, for C# and other .net-based languages.
 
