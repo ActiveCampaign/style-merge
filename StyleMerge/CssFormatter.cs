@@ -63,14 +63,20 @@ namespace StyleMerge
                 .ToPool();
         }
 
-        public string Rule(string name, string value) => 
-            string.Concat(name, " ", value, ";");
+        public string Rule(string name, string value)
+        {
+            return string.Concat(name, " ", value, ";");
+        }
 
-        public string Rule(string name, string prelude, string rules) => 
-            string.Concat(name, " ", string.IsNullOrEmpty(prelude) ? string.Empty : prelude + " ", rules);
+        public string Rule(string name, string prelude, string rules)
+        {
+            return string.Concat(name, " ", string.IsNullOrEmpty(prelude) ? string.Empty : prelude + " ", rules);
+        }
 
-        public string Comment(string data) => 
-            $"/*{data}*/";
+        public string Comment(string data)
+        {
+            return $"/*{data}*/";
+        }
 
         public string Sheet(IEnumerable<IStyleFormattable> rules)
         {
