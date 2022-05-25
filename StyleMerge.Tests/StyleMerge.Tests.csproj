@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -28,6 +28,8 @@
     <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Output.html" />
+    <None Remove="TestCases\ShouldConvertColorRGBAToHex\Input.html" />
+    <None Remove="TestCases\ShouldConvertColorRGBAToHex\Output.html" />
     <None Remove="TestCases\ShouldEliminateScriptBlocks\Input.html" />
     <None Remove="TestCases\ShouldEliminateScriptBlocks\Output.html" />
     <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Input.html" />

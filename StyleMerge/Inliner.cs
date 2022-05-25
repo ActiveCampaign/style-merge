@@ -30,8 +30,9 @@ namespace StyleMerge
         private static readonly Regex PseudoClassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after|root)");
         private static readonly Regex DocTypeFinder = new Regex("^<!DOCTYPE [^>]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         private static readonly StylesheetParser StylesheetParser = new StylesheetParser();
-        public static readonly IHtmlParser HtmlParser;
-        public static readonly ICssParser CssParser;
+        private static readonly CssFormatter CssFormatter = new CssFormatter();
+        private static readonly IHtmlParser HtmlParser;
+        private static readonly ICssParser CssParser;
 
         static Inliner()
         {
@@ -141,7 +142,8 @@ namespace StyleMerge
                     styleSheet.Styles.PageRules.Any() ||
                     styleSheet.Styles.StyleRules.Any())
                 {
-                    styleSheet.Element.TextContent = styleSheet.Styles.ToCss();
+                    var declaration = CssParser.ParseStyleSheet(styleSheet.Styles.ToCss());
+                    styleSheet.Element.TextContent = declaration.ToCss(CssFormatter);
                 }
                 else
                 {
@@ -190,7 +192,7 @@ namespace StyleMerge
                             styles.SetProperty(prop.Name, prop.Value, prop.IsImportant ? "important" : null);
                         }
 
-                        node.SetAttribute("style", styles.ToCss());
+                        node.SetAttribute("style", styles.ToCss(CssFormatter));
                     }
                 }
                 catch (NotImplementedException ex)

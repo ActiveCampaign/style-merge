@@ -32,6 +32,7 @@ namespace StyleMerge.Tests
         [InlineData("ShouldApplyStylesInDocumentOrder")]
         [InlineData("ShouldApplyStylesAccordingToSpecificityValues")]
         [InlineData("ShouldApplyStylesForRulesWithMultipleSelectors")]
+        [InlineData("ShouldConvertColorRGBAToHex")]
         [InlineData("ShouldEliminateStyleBlocksWhereAllRulesAreInlined")]
         [InlineData("ShouldEliminateScriptBlocks")]
         [InlineData("ShouldKeepMediaQueryStylesInStyleBlocks")]
