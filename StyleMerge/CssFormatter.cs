@@ -15,7 +15,11 @@ namespace StyleMerge
         public string Declaration(string name, string value, bool important)
         {
             var css = $"{name}: {value}{(important ? " !important" : string.Empty)}";
+
+            // By default, AngleSharp uses RGBA to represent color values - this will break older 
+            // email clients (ie. Outlook 2007) and so we need to serialize colors as hex values
             css = Regex.Replace(css, RgbaPattern, RgbaEvaluator, RegexOptions.IgnoreCase);
+
             return css;
         }
 
