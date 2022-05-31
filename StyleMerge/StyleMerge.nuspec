@@ -13,11 +13,11 @@
     <copyright>Copyright 2022</copyright>
     <tags>CSS HTML</tags>
     <dependencies>
-      <dependency id="CsQuery" version="1.3.4" />
-      <dependency id="ExCSS" version="2.0.5" />
+      <dependency id="AngleSharp" version="0.16.1" />
+      <dependency id="AngleSharp.Css" version="0.16.14" />
     </dependencies>
   </metadata>
   <files>
-		<file src="bin\Release\StyleMerge.*" target="lib\net45" />
+		<file src="bin\Release\netstandard2.0\StyleMerge.*" target="lib\netstandard2.0" />
   </files>
 </package>

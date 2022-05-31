@@ -26,14 +26,20 @@
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
+    <None Remove="TestCases\ShouldHandleBoxSizing\Input.html" />
+    <None Remove="TestCases\ShouldHandleBoxSizing\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesInDocumentOrder\Output.html" />
     <None Remove="TestCases\ShouldConvertColorRGBAToHex\Input.html" />
     <None Remove="TestCases\ShouldConvertColorRGBAToHex\Output.html" />
     <None Remove="TestCases\ShouldEliminateScriptBlocks\Input.html" />
     <None Remove="TestCases\ShouldEliminateScriptBlocks\Output.html" />
+    <None Remove="TestCases\ShouldKeepImportStylesInStyleBlocks\Input.html" />
+    <None Remove="TestCases\ShouldKeepImportStylesInStyleBlocks\Output.html" />
     <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Input.html" />
     <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Output.html" />
+    <None Remove="TestCases\ShouldPreserveRootSelector\Input.html" />
+    <None Remove="TestCases\ShouldPreserveRootSelector\Output.html" />
   </ItemGroup>
 
   <ItemGroup>
