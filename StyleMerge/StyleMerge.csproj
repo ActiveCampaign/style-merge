@@ -8,7 +8,6 @@
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.16.1" />
     <PackageReference Include="AngleSharp.Css" Version="0.16.4" />
-    <PackageReference Include="ExCSS" Version="4.1.3" />
   </ItemGroup>
 
 </Project>

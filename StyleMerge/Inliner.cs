@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AngleSharp;
+using AngleSharp.Css.Dom;
 using AngleSharp.Css.Parser;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
-using ExCSS;
 
 namespace StyleMerge
 {
@@ -19,7 +19,7 @@ namespace StyleMerge
         public int DocumentOrder { get; set; }
         public string Selector { get; set; }
         public Specificity Specificity { get; set; }
-        public IEnumerable<IProperty> Properties { get; set; }
+        public IEnumerable<ICssProperty> Properties { get; set; }
     }
 
     /// <summary>
@@ -29,16 +29,14 @@ namespace StyleMerge
     {
         private static readonly Regex PseudoClassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after|root)");
         private static readonly Regex DocTypeFinder = new Regex("^<!DOCTYPE [^>]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-        private static readonly StylesheetParser StylesheetParser = new StylesheetParser();
-        public static readonly IHtmlParser HtmlParser;
-        public static readonly ICssParser CssParser;
-
-        static Inliner()
+        private static readonly CssFormatter CssFormatter = new CssFormatter();
+        private static readonly HtmlParser HtmlParser = new HtmlParser();
+        private static readonly CssParser CssParser = new CssParser(new CssParserOptions
         {
-            var context = BrowsingContext.New(Configuration.Default.WithCss());
-            HtmlParser = context.GetService<IHtmlParser>();
-            CssParser = context.GetService<ICssParser>();
-        }
+            IsIncludingUnknownDeclarations = true,
+            IsIncludingUnknownRules = true,
+            IsToleratingInvalidSelectors = true
+        });
 
         /// <summary>
         /// Accepts a string of HTML and produces a string of HTML with styles inlined.
@@ -53,13 +51,13 @@ namespace StyleMerge
                 s.Remove();
             }
 
-            var styleSheets = new List<(IElement Element, Stylesheet Styles)>();
+            var styleSheets = new List<(IElement Element, ICssStyleSheet Styles)>();
 
             foreach (var element in document.GetElementsByTagName("style").ToArray())
             {
                 try
                 {
-                    styleSheets.Add((element, StylesheetParser.Parse(element.InnerHtml)));
+                    styleSheets.Add((element, CssParser.ParseStyleSheet(element.InnerHtml)));
                 }
                 catch
                 {
@@ -72,25 +70,26 @@ namespace StyleMerge
 
             //YIKES! this is hideous, but it's OK, it'll do what we need.
             var ruleIndex = 0;
-            foreach (var styleSheet in styleSheets)
+            foreach (var (Element, Styles) in styleSheets)
             {
-                var uninlineable = new List<(string Selector, StyleDeclaration Style)>();
+                var uninlineable = new List<(string Selector, ICssStyleDeclaration Style)>();
 
-                var styleRules = styleSheet.Styles.StyleRules.Where(s => s.Selector != null).ToArray();
+                var styleRules = Styles.Rules.OfType<ICssStyleRule>().ToArray();
                 foreach (var rule in styleRules)
                 {
                     var selectors = rule.SelectorText.Split(',').ToLookup(k => true);
-                    // MOST of the time, the selector isn't going to match.
-                    // Therefore, we avoid regexing each selector in the string
-                    // for only those cases where it does match.
+
+                    // MOST of the time, the selector isn't going to match. We avoid regexing 
+                    // every selector in the string for only those cases where it does match.
                     if (PseudoClassSelector.IsMatch(rule.SelectorText))
                     {
-                        selectors = rule.SelectorText.Split(',').ToLookup(k => !PseudoClassSelector.IsMatch(k));
+                        selectors = rule.SelectorText.Split(',')
+                            .ToLookup(k => !PseudoClassSelector.IsMatch(k));
                     }
 
                     var importantAndNot = rule.Style.ToLookup(k => k.IsImportant);
 
-                    // Inline the safe rules per normal.
+                    // Inline the safe rules (ie. not pseudoselectors)
                     foreach (var selector in selectors[true])
                     {
                         ruleIndex++;
@@ -116,36 +115,32 @@ namespace StyleMerge
                     }
                 }
 
-                // Scrub all rules from the stylesheet
-                var removeRules = styleSheet.Styles.StyleRules.ToArray();
-                foreach (var rule in removeRules)
+                // Scrub all 'basic' style rules (ie. ICssStyleRule) from the stylesheet. We must
+                // preserve media, fontface, import, etc. rules, since they cannot be inlined.
+                for (var i = Styles.Rules.Length - 1; i >= 0; i--)
                 {
-                    styleSheet.Styles.RemoveChild(rule);
+                    if (Styles.Rules.ElementAt(i) is ICssStyleRule)
+                    {
+                        Styles.RemoveAt(i);
+                    }
                 }
 
-                // If there are "left over" rules that could not be inlined (ie. pseudoselectors), we need 
-                // to make sure those are applied back to the stylesheet so they do not just disappear
+                // If there are rules that could not be inlined (ie. pseudoselectors), we need 
+                // to make sure those are applied back to the stylesheet
                 foreach (var (Selector, Style) in uninlineable)
                 {
-                    var declarations = Style.Declarations.Select(x => $"{x.Name}: {x.Value} !important");
-                    var rule = styleSheet.Styles.Add(RuleType.Style);
-                    rule.Text = $"{Selector} {{ {string.Join(";", declarations)} }}";
+                    var declarations = Style.Select(x => $"{x.Name}: {x.Value} !important");
+                    var rule = $"{Selector} {{ {string.Join(";", declarations)} }}";
+                    Styles.Insert(rule, Styles.Rules.Length);
                 }
 
-                // Apply the stylesheet content back to the element
-                if (styleSheet.Styles.CharacterSetRules.Any() ||
-                    styleSheet.Styles.FontfaceSetRules.Any() ||
-                    styleSheet.Styles.ImportRules.Any() ||
-                    styleSheet.Styles.MediaRules.Any() ||
-                    styleSheet.Styles.NamespaceRules.Any() ||
-                    styleSheet.Styles.PageRules.Any() ||
-                    styleSheet.Styles.StyleRules.Any())
+                if (Styles.Rules.Any())
                 {
-                    styleSheet.Element.TextContent = styleSheet.Styles.ToCss();
+                    Element.TextContent = Styles.ToCss(CssFormatter);
                 }
                 else
                 {
-                    styleSheet.Element.Remove();
+                    Element.Remove();
                 }
             }
 
@@ -156,7 +151,7 @@ namespace StyleMerge
             ApplyRulesToElements(document, normalRules, noApplyElements);
             ApplyRulesToElements(document, importantRules, noApplyElements);
 
-            //fix to original doctype
+            // Fix to original doctype
             var processed = document.ToHtml();
             var m = DocTypeFinder.Match(sourceHtml);
             if (m.Success)
@@ -190,7 +185,7 @@ namespace StyleMerge
                             styles.SetProperty(prop.Name, prop.Value, prop.IsImportant ? "important" : null);
                         }
 
-                        node.SetAttribute("style", styles.ToCss());
+                        node.SetAttribute("style", styles.ToCss(CssFormatter));
                     }
                 }
                 catch (NotImplementedException ex)
