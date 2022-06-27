@@ -188,12 +188,9 @@ namespace StyleMerge
                         node.SetAttribute("style", styles.ToCss(CssFormatter));
                     }
                 }
-                catch (NotImplementedException ex)
+                catch (Exception ex)
                 {
-                    if (ex.Message == "Pseudoclasses that require a browser aren't implemented.")
-                    {
-                        throw new InliningException("Pseudoclasses that require a browser, such as '" + rule.Selector + "', are not supported for inlining.");
-                    }
+                    Console.WriteLine($"Failed to apply rule to document - {ex.Message} (selector: {rule.Selector})");
                 }
             }
         }
