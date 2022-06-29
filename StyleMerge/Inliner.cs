@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using AngleSharp;
 using AngleSharp.Css.Dom;
 using AngleSharp.Css.Parser;
-using AngleSharp.Css.Values;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
@@ -176,10 +175,6 @@ namespace StyleMerge
 
             foreach (var rule in sortedRules)
             {
-                var applyProps = rule.Properties.Where(x => ShouldApply(x));
-                if (!applyProps.Any())
-                    continue;
-
                 try
                 {
                     // All elements except for those determined to not get styles.
@@ -187,14 +182,18 @@ namespace StyleMerge
                     {
                         var styles = CssParser.ParseDeclaration(node.GetAttribute("style") ?? string.Empty);
                         
-                        foreach (var prop in applyProps)
+                        foreach (var prop in rule.Properties)
                         {
                             // TODO: We should probably lookup the existing property and only set it if it doesn't
                             // already exist. As things stand currently we are overwriting existing inline styles.
                             styles.SetProperty(prop.Name, prop.Value, prop.IsImportant ? "important" : null);
                         }
 
-                        node.SetAttribute("style", styles.ToCss(CssFormatter));
+                        var styleAttribute = styles.ToCss(CssFormatter);
+                        if (!string.IsNullOrWhiteSpace(styleAttribute))
+                        {
+                            node.SetAttribute("style", styleAttribute);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -202,16 +201,6 @@ namespace StyleMerge
                     Console.WriteLine($"Failed to apply rule to document - {ex.Message} (selector: {rule.Selector})");
                 }
             }
-        }
-
-        private static bool ShouldApply(ICssProperty x)
-        {
-            return !IsTransparentColor(x);
-        }
-
-        private static bool IsTransparentColor(ICssProperty prop)
-        {
-            return prop.RawValue is Color color && color.Alpha == 0;
         }
     }
 }

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using AngleSharp;
+using AngleSharp.Css.Dom;
+using AngleSharp.Css.Values;
 using AngleSharp.Text;
 
 namespace StyleMerge
 {
     public class CssFormatter : IStyleFormatter
     {
-        private const string RgbaPattern = @"rgba[(](\d{1,3})\s?,\s?(\d{1,3})\s?,\s?(\d{1,3})\s?,\s?(\d{1,3})[)]";
+        private const string RgbaPattern = @"rgba[(](\d{1,3})\s?,\s?(\d{1,3})\s?,\s?(\d{1,3}),\s?.*[)]";
         private static readonly MatchEvaluator RgbaEvaluator = new MatchEvaluator(ReplaceRgba);
 
         public string Declaration(string name, string value, bool important)
@@ -30,7 +33,7 @@ namespace StyleMerge
 
             using (var writer = new StringWriter(sb))
             {
-                foreach (var declaration in declarations)
+                foreach (var declaration in Filter(declarations))
                 {
                     writer.Write(Symbols.Space);
                     declaration.ToCss(writer, this);
@@ -55,7 +58,7 @@ namespace StyleMerge
 
             using (var writer = new StringWriter(sb))
             {
-                foreach (var rule in rules)
+                foreach (var rule in Filter(rules))
                 {
                     writer.Write(Symbols.Space);
                     rule.ToCss(writer, this);
@@ -89,7 +92,7 @@ namespace StyleMerge
 
             using (var writer = new StringWriter(sb))
             {
-                foreach (var rule in rules)
+                foreach (var rule in Filter(rules))
                 {
                     rule.ToCss(writer, this);
                     writer.Write(sep);
@@ -111,6 +114,19 @@ namespace StyleMerge
             var b = byte.Parse(match.Groups[3].Value);
             
             return $"#{r:X2}{g:X2}{b:X2}";
+        }
+
+        private IEnumerable<IStyleFormattable> Filter(IEnumerable<IStyleFormattable> rules)
+            => rules.Where(x => !IsTransparentColor(x));
+
+        private static bool IsTransparentColor(IStyleFormattable rule)
+        {
+            // If alpha channel is completely transparent (ie. background: transparent), we don't render
+            // this rule since there is no compatible 6-digit hex representation ... including this rule
+            // *should* not be necessary anyway, it is probably redundant in most cases.
+            return rule is ICssProperty prop
+                && prop.RawValue is Color color
+                && color.Alpha == 0;
         }
     }
 }

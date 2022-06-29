@@ -34,6 +34,7 @@ namespace StyleMerge.Tests
         [InlineData("ShouldApplyStylesForRulesWithMultipleSelectors")]
         [InlineData("ShouldConvertColorRGBAToHex")]
         [InlineData("ShouldDropTransparentBackgroundColor")]
+        [InlineData("ShouldDropInlineTransparentBackgroundColor")]
         [InlineData("ShouldEliminateStyleBlocksWhereAllRulesAreInlined")]
         [InlineData("ShouldEliminateScriptBlocks")]
         [InlineData("ShouldKeepImportStylesInStyleBlocks")]

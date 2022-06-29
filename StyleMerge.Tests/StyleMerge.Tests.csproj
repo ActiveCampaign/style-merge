@@ -26,6 +26,8 @@
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
+    <None Remove="TestCases\ShouldDropInlineTransparentBackgroundColor\Input.html" />
+    <None Remove="TestCases\ShouldDropInlineTransparentBackgroundColor\Output.html" />
     <None Remove="TestCases\ShouldDropTransparentBackgroundColor\Input.html" />
     <None Remove="TestCases\ShouldDropTransparentBackgroundColor\Output.html" />
     <None Remove="TestCases\ShouldHandleBoxSizing\Input.html" />
