@@ -29,6 +29,8 @@ namespace StyleMerge.Tests
         }
 
         [Theory]
+        [InlineData("ShouldApplyBackgroundComplex")]
+        [InlineData("ShouldApplyBackgroundImage")]
         [InlineData("ShouldApplyBoxShadowComplex")]
         [InlineData("ShouldApplyStylesInDocumentOrder")]
         [InlineData("ShouldApplyStylesAccordingToSpecificityValues")]

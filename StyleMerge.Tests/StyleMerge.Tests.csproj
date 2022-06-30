@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="TestCases\ShouldApplyBackgroundComplex\Input.html" />
+    <None Remove="TestCases\ShouldApplyBackgroundComplex\Output.html" />
+    <None Remove="TestCases\ShouldApplyBackgroundImage\Input.html" />
+    <None Remove="TestCases\ShouldApplyBackgroundImage\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />

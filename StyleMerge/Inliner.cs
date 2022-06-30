@@ -41,7 +41,8 @@ namespace StyleMerge
 
         private static readonly string[] UnsupportedStyles = new[]
         {
-            "word-break: break-word"
+            @"word-break: break-word",
+            @"background: url\(.*\).*\/.*"
         };
 
         static Inliner()
@@ -191,7 +192,7 @@ namespace StyleMerge
                     foreach (var node in document.QuerySelectorAll(rule.Selector).Where(k => !noApply.Contains(k)))
                     {
                         var styleAttribute = node.GetAttribute("style") ?? string.Empty;
-                        var deprecatedStyles = GetDeprecatedStyles(styleAttribute);
+                        var unsupportedStyles = GetUnsupportedStyles(styleAttribute);
                         var styles = CssParser.ParseDeclaration(styleAttribute ?? string.Empty);
                         
                         foreach (var prop in rule.Properties)
@@ -202,7 +203,7 @@ namespace StyleMerge
                         }
 
                         styleAttribute = styles.ToCss(CssFormatter);
-                        styleAttribute = string.Join(";", styleAttribute, string.Join(";", deprecatedStyles)); // re-add any deprecated styles not parseable
+                        styleAttribute = string.Join(";", styleAttribute, string.Join(";", unsupportedStyles)).TrimStart(';');
 
                         if (!string.IsNullOrWhiteSpace(styleAttribute))
                         {
@@ -217,16 +218,18 @@ namespace StyleMerge
             }
         }
 
-        private static IEnumerable<string> GetDeprecatedStyles(string styleAttribute)
+        // AngleSharp fails to parse some styles (ie. experimental / deprecated CSS) - we need to re-add these manually
+        // until we can figure out how to set the parser to just accept unrecognized/unsupported property values
+        private static IEnumerable<string> GetUnsupportedStyles(string styleAttribute)
         {
             var deprecated = new List<string>();
             var styleNormalized = styleAttribute.Replace(" ", "");
 
             foreach (var style in UnsupportedStyles)
             {
-                if (styleNormalized.Contains(style.Replace(" ", "")))
+                if (Regex.IsMatch(styleNormalized, style.Replace(" ", "")))
                 {
-                    deprecated.Add(style);
+                    deprecated.Add(styleAttribute);
                 }
             }
 
