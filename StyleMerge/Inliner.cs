@@ -38,6 +38,11 @@ namespace StyleMerge
             IsToleratingInvalidSelectors = true
         });
 
+        private static readonly string[] UnsupportedStyles = new[]
+        {
+            "word-break: break-word"
+        };
+
         /// <summary>
         /// Accepts a string of HTML and produces a string of HTML with styles inlined.
         /// </summary>
@@ -180,7 +185,9 @@ namespace StyleMerge
                     // All elements except for those determined to not get styles.
                     foreach (var node in document.QuerySelectorAll(rule.Selector).Where(k => !noApply.Contains(k)))
                     {
-                        var styles = CssParser.ParseDeclaration(node.GetAttribute("style") ?? string.Empty);
+                        var styleAttribute = node.GetAttribute("style") ?? string.Empty;
+                        var deprecatedStyles = GetDeprecatedStyles(styleAttribute);
+                        var styles = CssParser.ParseDeclaration(styleAttribute ?? string.Empty);
                         
                         foreach (var prop in rule.Properties)
                         {
@@ -189,7 +196,9 @@ namespace StyleMerge
                             styles.SetProperty(prop.Name, prop.Value, prop.IsImportant ? "important" : null);
                         }
 
-                        var styleAttribute = styles.ToCss(CssFormatter);
+                        styleAttribute = styles.ToCss(CssFormatter);
+                        styleAttribute = string.Join(";", styleAttribute, string.Join(";", deprecatedStyles)); // re-add any deprecated styles not parseable
+
                         if (!string.IsNullOrWhiteSpace(styleAttribute))
                         {
                             node.SetAttribute("style", styleAttribute);
@@ -201,6 +210,22 @@ namespace StyleMerge
                     Console.WriteLine($"Failed to apply rule to document - {ex.Message} (selector: {rule.Selector})");
                 }
             }
+        }
+
+        private static IEnumerable<string> GetDeprecatedStyles(string styleAttribute)
+        {
+            var deprecated = new List<string>();
+            var styleNormalized = styleAttribute.Replace(" ", "");
+
+            foreach (var style in UnsupportedStyles)
+            {
+                if (styleNormalized.Contains(style.Replace(" ", "")))
+                {
+                    deprecated.Add(style);
+                }
+            }
+
+            return deprecated;
         }
     }
 }
