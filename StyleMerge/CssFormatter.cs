@@ -9,7 +9,7 @@ namespace StyleMerge
 {
     public class CssFormatter : IStyleFormatter
     {
-        private const string RgbaPattern = @"rgba[(](\d{1,3})\s?,\s?(\d{1,3})\s?,\s?(\d{1,3}),\s?(.*)[)]";
+        private const string RgbaPattern = @"rgba[(](\d{1,3})\s?,\s?(\d{1,3})\s?,\s?(\d{1,3}),\s?(\d{0,3}(?:\.\d*)?)[)]";
         private static readonly MatchEvaluator RgbaEvaluator = new MatchEvaluator(ReplaceRgba);
 
         public string Declaration(string name, string value, bool important)

@@ -29,6 +29,7 @@ namespace StyleMerge.Tests
         }
 
         [Theory]
+        [InlineData("ShouldApplyBoxShadowComplex")]
         [InlineData("ShouldApplyStylesInDocumentOrder")]
         [InlineData("ShouldApplyStylesAccordingToSpecificityValues")]
         [InlineData("ShouldApplyStylesForRulesWithMultipleSelectors")]

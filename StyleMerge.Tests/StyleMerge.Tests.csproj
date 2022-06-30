@@ -26,6 +26,8 @@
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
+    <None Remove="TestCases\ShouldApplyBoxShadowComplex\Input.html" />
+    <None Remove="TestCases\ShouldApplyBoxShadowComplex\Output.html" />
     <None Remove="TestCases\ShouldConvertColorRGBToHex\Input.html" />
     <None Remove="TestCases\ShouldConvertColorRGBToHex\Output.html" />
     <None Remove="TestCases\ShouldPreserveHexColorInline\Input.html" />
