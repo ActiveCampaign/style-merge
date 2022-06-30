@@ -79,7 +79,6 @@ namespace StyleMerge
             var normalRules = new List<RuleTuple>();
             var importantRules = new List<RuleTuple>();
 
-            //YIKES! this is hideous, but it's OK, it'll do what we need.
             var ruleIndex = 0;
             foreach (var (Element, Styles) in styleSheets)
             {
