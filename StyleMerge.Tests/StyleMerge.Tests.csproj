@@ -26,8 +26,8 @@
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
-    <None Remove="TestCases\ShouldPreserveInlineTransparentBackgroundColor\Input.html" />
-    <None Remove="TestCases\ShouldPreserveInlineTransparentBackgroundColor\Output.html" />
+    <None Remove="TestCases\ShouldPreserveTransparentBackgroundColorInline\Input.html" />
+    <None Remove="TestCases\ShouldPreserveTransparentBackgroundColorInline\Output.html" />
     <None Remove="TestCases\ShouldPreserveTransparentBackgroundColor\Input.html" />
     <None Remove="TestCases\ShouldPreserveTransparentBackgroundColor\Output.html" />
     <None Remove="TestCases\ShouldHandleBoxSizing\Input.html" />
@@ -44,6 +44,8 @@
     <None Remove="TestCases\ShouldKeepMediaQueryStylesInStyleBlocks\Output.html" />
     <None Remove="TestCases\ShouldPreserveRootSelector\Input.html" />
     <None Remove="TestCases\ShouldPreserveRootSelector\Output.html" />
+    <None Remove="TestCases\ShouldPreserveDeprecatedWordBreakInline\Input.html" />
+    <None Remove="TestCases\ShouldPreserveDeprecatedWordBreakInline\Output.html" />
     <None Remove="TestCases\ShouldSkipInvalidCSSDeclarations\Input.html" />
     <None Remove="TestCases\ShouldSkipInvalidCSSDeclarations\Output.html" />
   </ItemGroup>
