@@ -26,6 +26,14 @@
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Input.html" />
     <None Remove="TestCases\ShouldApplyStylesAccordingToSpecificityValues\Output.html" />
     <None Remove="TestCases\ShouldApplyStylesForRulesWithMultipleSelectors\Input.html" />
+    <None Remove="TestCases\ShouldConvertColorRGBToHex\Input.html" />
+    <None Remove="TestCases\ShouldConvertColorRGBToHex\Output.html" />
+    <None Remove="TestCases\ShouldPreserveHexColorInline\Input.html" />
+    <None Remove="TestCases\ShouldPreserveHexColorInline\Output.html" />
+    <None Remove="TestCases\ShouldPreserveHexColor\Input.html" />
+    <None Remove="TestCases\ShouldPreserveHexColor\Output.html" />
+    <None Remove="TestCases\ShouldNotConvertTransparentColorRGBAToHex\Input.html" />
+    <None Remove="TestCases\ShouldNotConvertTransparentColorRGBAToHex\Output.html" />
     <None Remove="TestCases\ShouldPreserveTransparentBackgroundColorInline\Input.html" />
     <None Remove="TestCases\ShouldPreserveTransparentBackgroundColorInline\Output.html" />
     <None Remove="TestCases\ShouldPreserveTransparentBackgroundColor\Input.html" />

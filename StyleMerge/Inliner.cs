@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using AngleSharp;
 using AngleSharp.Css.Dom;
 using AngleSharp.Css.Parser;
+using AngleSharp.Css.Values;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
@@ -30,8 +31,8 @@ namespace StyleMerge
         private static readonly Regex PseudoClassSelector = new Regex(":(hover|link|visited|active|focus|target|first-letter|first-line|before|after|root)");
         private static readonly Regex DocTypeFinder = new Regex("^<!DOCTYPE [^>]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         private static readonly CssFormatter CssFormatter = new CssFormatter();
-        private static readonly HtmlParser HtmlParser = new HtmlParser();
-        private static readonly CssParser CssParser = new CssParser(new CssParserOptions
+        private static readonly IHtmlParser HtmlParser = new HtmlParser();
+        private static readonly ICssParser CssParser = new CssParser(new CssParserOptions
         {
             IsIncludingUnknownDeclarations = true,
             IsIncludingUnknownRules = true,
@@ -42,6 +43,11 @@ namespace StyleMerge
         {
             "word-break: break-word"
         };
+
+        static Inliner()
+        {
+            Color.UseHex = true; // for compatibility with older email clients (still uses RGBA when opacity < 1)
+        }
 
         /// <summary>
         /// Accepts a string of HTML and produces a string of HTML with styles inlined.

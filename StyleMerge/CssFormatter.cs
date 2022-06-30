@@ -16,8 +16,8 @@ namespace StyleMerge
         {
             var css = $"{name}: {value}{(important ? " !important" : string.Empty)}";
 
-            // By default, AngleSharp uses RGBA to represent color values - this will break older 
-            // email clients (ie. Outlook 2007) and so we need to serialize colors as hex values
+            // By default, AngleSharp uses RGBA to represent color values that have opacity, but for
+            // older client compatibility, we want to use 'transparent' for completely transparent colors.
             css = Regex.Replace(css, RgbaPattern, RgbaEvaluator, RegexOptions.IgnoreCase);
 
             return css;
@@ -106,16 +106,13 @@ namespace StyleMerge
 
         private static string ReplaceRgba(Match match)
         {
-            // If alpha channel is empty (ie. background: transparent) there is no compatible 6-digit
-            // hex representation ... we need to return 'transparent' in this special case.
+            // If alpha channel is completely empty we return 'transparent' for client compatibility. In most cases,
+            // this was how the rule was specified anyway, AngleSharp is just converting it to RGBA representation.
+
             if (float.Parse(match.Groups[4].Value) == 0)
                 return "transparent";
 
-            var r = byte.Parse(match.Groups[1].Value);
-            var g = byte.Parse(match.Groups[2].Value);
-            var b = byte.Parse(match.Groups[3].Value);
-            
-            return $"#{r:X2}{g:X2}{b:X2}";
+            return match.Value;
         }
     }
 }
